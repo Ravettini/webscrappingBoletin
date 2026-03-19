@@ -10,8 +10,6 @@ import pandas as pd
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 # =========================
@@ -143,10 +141,10 @@ def iniciar_driver():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--log-level=3")
 
-    return webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=options
-    )
+    # Dejar que Selenium Manager descargue un ChromeDriver compatible
+    # (evita el mismatch de versiones entre Chromium y ChromeDriver).
+    options.binary_location = os.getenv("CHROME_BINARY", "/usr/bin/chromium")
+    return webdriver.Chrome(options=options)
 
 def hacer_scroll(driver, veces=SCROLL_TIMES, pausa=SCROLL_PAUSE):
     for _ in range(veces):

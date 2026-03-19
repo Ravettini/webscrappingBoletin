@@ -8,7 +8,6 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
-    chromium-driver \
     ca-certificates \
     fonts-liberation \
     libasound2 \
