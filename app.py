@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_XLSX = os.path.join(BASE_DIR, "decretos_cuil.xlsx")
+OUTPUT_LOG = os.path.join(BASE_DIR, "debug_scraping.log")
 
 
 @app.get("/health")
@@ -23,6 +24,15 @@ def run_job():
         run_scraping()
         exists = os.path.exists(OUTPUT_XLSX)
         if not exists:
+            log_tail = None
+            try:
+                if os.path.exists(OUTPUT_LOG):
+                    with open(OUTPUT_LOG, "r", encoding="utf-8", errors="ignore") as f:
+                        data = f.read()
+                        # Tail simple por tamaño (evita depender de terminadores de línea).
+                        log_tail = data[-4000:]
+            except Exception:
+                log_tail = None
             return (
                 jsonify(
                     {
@@ -30,6 +40,7 @@ def run_job():
                         "error": "El scraping terminó pero no generó el archivo Excel esperado.",
                         "expected_file": OUTPUT_XLSX,
                         "exists": False,
+                        "log_tail": log_tail,
                     }
                 ),
                 500,
