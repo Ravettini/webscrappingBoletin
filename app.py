@@ -8,6 +8,9 @@ from script import main as run_scraping
 
 app = Flask(__name__)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_XLSX = os.path.join(BASE_DIR, "decretos_cuil.xlsx")
+
 
 @app.get("/health")
 def health():
@@ -18,15 +21,26 @@ def health():
 def run_job():
     try:
         run_scraping()
+        exists = os.path.exists(OUTPUT_XLSX)
+        if not exists:
+            return (
+                jsonify(
+                    {
+                        "ok": False,
+                        "error": "El scraping terminó pero no generó el archivo Excel esperado.",
+                        "expected_file": OUTPUT_XLSX,
+                        "exists": False,
+                    }
+                ),
+                500,
+            )
+
         return jsonify(
             {
                 "ok": True,
                 "message": "Scraping ejecutado",
-                "files": [
-                    "decretos_cuil.xlsx",
-                    "debug_scraping.log",
-                    "debug_scraping.json",
-                ],
+                "file": OUTPUT_XLSX,
+                "exists": True,
             }
         )
     except Exception as e:
@@ -44,25 +58,22 @@ def run_job():
 
 @app.get("/download")
 def download_excel():
-    filename = "decretos_cuil.xlsx"
-    output_path = os.path.join(os.getcwd(), filename)
-
-    if not os.path.exists(output_path):
+    if not os.path.exists(OUTPUT_XLSX):
         return (
             jsonify(
                 {
                     "ok": False,
                     "error": "El archivo no fue generado todavía. Ejecutá primero POST /run.",
-                    "file": filename,
+                    "file": OUTPUT_XLSX,
                 }
             ),
             404,
         )
 
     return send_file(
-        output_path,
+        OUTPUT_XLSX,
         as_attachment=True,
-        download_name=filename,
+        download_name=os.path.basename(OUTPUT_XLSX),
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
 

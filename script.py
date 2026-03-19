@@ -18,7 +18,8 @@ from selenium.webdriver.common.by import By
 HOME_URL = "https://boletinoficial.buenosaires.gob.ar/"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
-OUTPUT_XLSX = "decretos_cuil.xlsx"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_XLSX = os.path.join(BASE_DIR, "decretos_cuil.xlsx")
 OUTPUT_LOG = "debug_scraping.log"
 OUTPUT_JSON = "debug_scraping.json"
 
