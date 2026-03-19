@@ -52,6 +52,10 @@ def log_error(msg):
 # REGEX
 # =========================
 REGEX_DECRETO_TITULO = re.compile(r"decreto\s*n[°º]\s*\d+", flags=re.IGNORECASE)
+REGEX_RESOLUCION_TITULO = re.compile(
+    r"resoluci[óo]n\s*(?:n[°º]|nro\.?)\s*\d+(?:/[A-Za-z0-9]+)*",
+    flags=re.IGNORECASE,
+)
 
 # Nombre completo + DNI + CUIL
 REGEX_PERSONA_DNI_CUIL = re.compile(
@@ -171,7 +175,7 @@ def extraer_decretos_home(driver):
             if not txt or not href:
                 continue
 
-            if REGEX_DECRETO_TITULO.search(txt):
+            if REGEX_DECRETO_TITULO.search(txt) or REGEX_RESOLUCION_TITULO.search(txt):
                 if href not in vistos:
                     vistos.add(href)
 
