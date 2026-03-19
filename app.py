@@ -1,4 +1,6 @@
-from flask import Flask, jsonify
+import os
+
+from flask import Flask, jsonify, send_file
 import traceback
 
 from script import main as run_scraping
@@ -38,6 +40,31 @@ def run_job():
             ),
             500,
         )
+
+
+@app.get("/download")
+def download_excel():
+    filename = "decretos_cuil.xlsx"
+    output_path = os.path.join(os.getcwd(), filename)
+
+    if not os.path.exists(output_path):
+        return (
+            jsonify(
+                {
+                    "ok": False,
+                    "error": "El archivo no fue generado todavía. Ejecutá primero POST /run.",
+                    "file": filename,
+                }
+            ),
+            404,
+        )
+
+    return send_file(
+        output_path,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
 
 
 if __name__ == "__main__":
