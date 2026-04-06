@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>LourBot - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#f8f9fa",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#e1e3e4",
+            "primary": "#013440",
+            "primary-container": "#204b57",
+            "secondary": "#4e6266",
+            "tertiary": "#133527",
+            "tertiary-fixed": "#c5ebd6",
+            "on-tertiary-fixed": "#002114",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "outline-variant": "#c1c8cb",
+            "on-surface": "#191c1d",
+            "on-primary": "#ffffff"
+          },
+          fontFamily: {
+            headline: ["Manrope"],
+            body: ["Inter"],
+            label: ["Space Grotesk"],
+            mono: ["JetBrains Mono"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+  <aside class="flex flex-col h-screen w-64 bg-surface-container-low py-8 pl-4 sticky overflow-hidden">
+    <div class="mb-10 px-4">
+      <h2 class="font-headline font-extrabold tracking-tighter text-primary text-xl">LourBot</h2>
+      <p class="font-label text-[10px] uppercase tracking-widest text-secondary opacity-70">Proyecto activo</p>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <div class="flex items-center gap-3 py-3 px-4 bg-white text-primary font-bold rounded-l-xl shadow-sm">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body text-sm">Dashboard</span>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="flex-1 flex flex-col min-w-0">
+    <header class="flex justify-between items-center w-full px-10 py-6 bg-surface sticky top-0 z-10">
+      <div class="flex flex-col">
+        <h1 class="font-headline tracking-tight font-bold text-2xl text-primary">LourBot</h1>
+        <p class="font-body text-sm text-secondary opacity-80">Ejecución del proceso de scrapping y generación de Excel final</p>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full shadow-sm">
+        <span id="dot" class="inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+        <span id="status-chip" class="font-label text-[10px] font-bold uppercase tracking-tighter">Listo</span>
+      </div>
+    </header>
+
+    <div class="flex-1 p-10 space-y-10 overflow-y-auto no-scrollbar">
+      <div class="grid grid-cols-12 gap-8">
+        <section class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-2xl p-8 min-h-[280px] shadow-[0px_20px_40px_rgba(25,28,29,0.06)]">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-label text-xs uppercase tracking-widest text-secondary mb-1">Controles de Ejecución</h3>
+              <h2 class="font-headline text-3xl font-bold text-primary">Panel Maestro</h2>
+            </div>
+            <div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+            <button id="btn-run" class="flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary to-primary-container text-white p-6 rounded-xl hover:scale-[1.02] transition-all active:scale-95 shadow-lg">
+              <span class="material-symbols-outlined text-4xl">play_arrow</span>
+              <span class="font-label text-[11px] font-bold uppercase tracking-widest">Ejecutar</span>
+            </button>
+
+            <button id="btn-download" class="flex flex-col items-center justify-center gap-3 bg-tertiary-fixed text-on-tertiary-fixed p-6 rounded-xl hover:brightness-95 transition-all active:scale-95">
+              <span class="material-symbols-outlined text-3xl text-tertiary">table_view</span>
+              <span class="font-label text-[11px] font-bold uppercase tracking-widest">Ver Excel</span>
+            </button>
+
+            <button id="btn-stop" class="flex flex-col items-center justify-center gap-3 bg-error-container text-on-error-container p-6 rounded-xl hover:brightness-95 transition-all active:scale-95 opacity-60 cursor-not-allowed" disabled>
+              <span class="material-symbols-outlined text-3xl">stop</span>
+              <span class="font-label text-[11px] font-bold uppercase tracking-widest">Detener</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="col-span-12 lg:col-span-5 bg-surface-container-low rounded-2xl p-8 shadow-sm">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-label text-xs uppercase tracking-widest text-secondary">Estado del Proceso</h3>
+            <span id="percent" class="font-headline font-extrabold text-4xl text-primary">0%</span>
+          </div>
+          <div class="w-full bg-surface-container-highest h-4 rounded-full overflow-hidden">
+            <div id="bar" class="bg-tertiary h-full rounded-full transition-all duration-700" style="width: 0%;"></div>
+          </div>
+          <p id="summary" class="mt-6 text-sm text-secondary">Esperando ejecución...</p>
+          <p id="dates" class="mt-2 text-xs text-secondary opacity-80">Fechas detectadas: -</p>
+        </section>
+      </div>
+
+      <section class="w-full">
+        <div class="flex items-center justify-between mb-4 px-2">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">terminal</span>
+            <h2 class="font-headline text-lg font-bold text-primary">Terminal LourBot</h2>
+          </div>
+        </div>
+        <div class="bg-primary text-tertiary-fixed rounded-2xl p-8 min-h-[320px] font-mono text-sm leading-relaxed overflow-auto shadow-2xl">
+          <pre id="console" class="whitespace-pre-wrap">[INFO] Interfaz lista. Presiona "Ejecutar".</pre>
+        </div>
+      </section>
+
+      <section class="bg-surface-container-low rounded-xl px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3 text-secondary overflow-hidden">
+          <span class="material-symbols-outlined text-sm">folder_open</span>
+          <span class="font-mono text-[11px] truncate select-all">decretos_cuil.xlsx</span>
+        </div>
+        <div class="font-label text-[10px] uppercase tracking-widest text-slate-500">LourBot · Flask</div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const btnRun = document.getElementById("btn-run");
+    const btnDownload = document.getElementById("btn-download");
+    const btnStop = document.getElementById("btn-stop");
+    const statusChip = document.getElementById("status-chip");
+    const dot = document.getElementById("dot");
+    const bar = document.getElementById("bar");
+    const percent = document.getElementById("percent");
+    const summary = document.getElementById("summary");
+    const datesEl = document.getElementById("dates");
+    const consoleEl = document.getElementById("console");
+    let pollTimer = null;
+    let logOffset = 0;
+
+    function appendLog(level, text) {
+      const now = new Date().toLocaleTimeString();
+      consoleEl.textContent += `\n[${level}] [${now}] ${text}`;
+      consoleEl.parentElement.scrollTop = consoleEl.parentElement.scrollHeight;
+    }
+
+    function setRunning(isRunning) {
+      btnRun.disabled = isRunning;
+      btnRun.classList.toggle("opacity-60", isRunning);
+      btnRun.classList.toggle("cursor-not-allowed", isRunning);
+      btnStop.disabled = !isRunning;
+      btnStop.classList.toggle("opacity-60", !isRunning);
+      btnStop.classList.toggle("cursor-not-allowed", !isRunning);
+      statusChip.textContent = isRunning ? "Ejecutando" : "Listo";
+      dot.classList.toggle("animate-pulse", isRunning);
+      if (isRunning) {
+        bar.style.width = "10%";
+        percent.textContent = "10%";
+        summary.textContent = "Scraping en curso. Esto puede demorar varios minutos.";
+      }
+    }
+
+    async function pollStatus() {
+      try {
+        const res = await fetch(`/ui/status?offset=${logOffset}`);
+        const data = await res.json();
+
+        if (data.logs && data.logs.length) {
+          for (const line of data.logs) {
+            appendLog("LOG", line);
+          }
+        }
+        logOffset = data.next_offset || logOffset;
+
+        const dates = data.dates_seen || [];
+        datesEl.textContent = `Fechas detectadas: ${dates.length ? dates.join(", ") : "-"}`;
+
+        if (data.running) {
+          setRunning(true);
+          const pct = Math.min(95, 10 + dates.length * 10);
+          bar.style.width = `${pct}%`;
+          percent.textContent = `${pct}%`;
+          summary.textContent = `Procesando... ${dates.length} fecha(s) detectada(s).`;
+        } else {
+          setRunning(false);
+          if (data.error) {
+            bar.style.width = "100%";
+            percent.textContent = "100%";
+            summary.textContent = "Finalizó con error.";
+            appendLog("ERROR", data.error);
+          } else if (data.exit_code === 0) {
+            bar.style.width = "100%";
+            percent.textContent = "100%";
+            summary.textContent = "Completado. Excel generado.";
+            appendLog("OK", "Scraping finalizado correctamente.");
+          } else if (data.exit_code !== null) {
+            bar.style.width = "100%";
+            percent.textContent = "100%";
+            summary.textContent = `Finalizó con código ${data.exit_code}.`;
+            appendLog("ERROR", `El proceso terminó con código ${data.exit_code}.`);
+          }
+          if (pollTimer) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+          }
+        }
+      } catch (err) {
+        summary.textContent = "Error de conexión.";
+        appendLog("ERROR", String(err));
+      }
+    }
+
+    btnRun.addEventListener("click", async () => {
+      setRunning(true);
+      logOffset = 0;
+      consoleEl.textContent = '[INFO] Interfaz lista. Presiona "Ejecutar".';
+      appendLog("INFO", "Iniciando proceso en background...");
+      try {
+        const res = await fetch("/ui/run", { method: "POST" });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setRunning(false);
+          appendLog("ERROR", data.error || "No se pudo iniciar el proceso.");
+          return;
+        }
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = setInterval(pollStatus, 2000);
+        await pollStatus();
+      } catch (err) {
+        setRunning(false);
+        appendLog("ERROR", String(err));
+      }
+    });
+
+    btnDownload.addEventListener("click", () => {
+      appendLog("INFO", "Abriendo descarga de Excel...");
+      window.location.href = "/download";
+    });
+
+    btnStop.addEventListener("click", async () => {
+      appendLog("INFO", "Solicitando detención...");
+      try {
+        const res = await fetch("/ui/stop", { method: "POST" });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          appendLog("ERROR", data.error || "No se pudo detener.");
+          return;
+        }
+        appendLog("INFO", "Se envió señal de detención.");
+      } catch (err) {
+        appendLog("ERROR", String(err));
+      }
+    });
+  </script>
+</body>
+</html>

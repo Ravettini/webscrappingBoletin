@@ -25,6 +25,7 @@ OUTPUT_JSON = "debug_scraping.json"
 
 SCROLL_TIMES = 10
 SCROLL_PAUSE = 1.8
+CONTEXT_MIN_CHARS = 1000
 
 SOLO_DECRETOS = []   # Ej: ["Decreto N° 112"]
 
@@ -146,9 +147,16 @@ def iniciar_driver():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--log-level=3")
 
-    # Dejar que Selenium Manager descargue un ChromeDriver compatible
-    # (evita el mismatch de versiones entre Chromium y ChromeDriver).
-    options.binary_location = os.getenv("CHROME_BINARY", "/usr/bin/chromium")
+    # En Render/Linux suele usarse Chromium en /usr/bin/chromium.
+    # En Windows local conviene NO fijar binary_location y dejar que Selenium
+    # use el Chrome instalado (o el path provisto por CHROME_BINARY).
+    chrome_binary = os.getenv("CHROME_BINARY", "").strip()
+    if chrome_binary:
+        options.binary_location = chrome_binary
+    elif os.path.exists("/usr/bin/chromium"):
+        options.binary_location = "/usr/bin/chromium"
+
+    # Dejar que Selenium Manager resuelva/descargue un driver compatible.
     return webdriver.Chrome(options=options)
 
 def hacer_scroll(driver, veces=SCROLL_TIMES, pausa=SCROLL_PAUSE):
@@ -264,7 +272,7 @@ def leer_pdf_bytes(data: bytes) -> str:
             txt = page.extract_text() or ""
             texto_paginas.append(txt)
             if i == 1:
-                log(f"Primeros 700 chars PDF pág 1: {normalizar(txt)[:700]}")
+                log(f"Primeros 1000 chars PDF pág 1: {normalizar(txt)[:1000]}")
     return normalizar("\n".join(texto_paginas))
 
 
@@ -303,7 +311,15 @@ def extraer_personas_de_articulos(texto: str):
             nombre_completo = normalizar(m.group("nombre"))
             cuil = normalizar(m.group("cuil"))
 
-            contexto = texto_art[max(0, m.start()-180): min(len(texto_art), m.end()+220)]
+            # Asegura al menos ~CONTEXT_MIN_CHARS alrededor del match.
+            # (Pre/post se ajustan según el largo disponible para no salirnos del texto.)
+            match_len = max(1, m.end() - m.start())
+            needed = CONTEXT_MIN_CHARS - match_len
+            pre = needed // 2
+            post = needed - pre
+            left = max(0, m.start() - pre)
+            right = min(len(texto_art), m.end() + post)
+            contexto = texto_art[left:right]
             contexto = normalizar(contexto)
 
             if not cargo_valido(texto_art):
