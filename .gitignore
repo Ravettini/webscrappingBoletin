@@ -9,7 +9,3 @@ venv/
 *.log
 *.json
 *.xlsx
-
-build/
-dist/
-*.spec
