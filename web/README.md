@@ -1,13 +1,9 @@
 # SCRAPBO
 
-App Next.js del scraper del Boletín Oficial CABA.
-
-Documentación completa (setup, env, Supabase, arquitectura): ver [README raíz](../README.md).
-
-## Quick start
+Explicación de cómo funciona el scraper: ver [README raíz](../README.md).
 
 ```bash
+cd web
 npm install
-cp .env.example .env.local
 npm run dev
 ```
