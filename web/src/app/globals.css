@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --surface: #f8f9fa;
+  --surface-container-low: #f3f4f5;
+  --surface-container-lowest: #ffffff;
+  --surface-container-highest: #e1e3e4;
+  --primary: #013440;
+  --primary-container: #204b57;
+  --secondary: #4e6266;
+  --tertiary: #133527;
+  --tertiary-fixed: #c5ebd6;
+  --on-tertiary-fixed: #002114;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --on-surface: #191c1d;
+  --on-primary: #ffffff;
+  --outline-variant: #c1c8cb;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-on-surface: var(--on-surface);
+  --color-on-primary: var(--on-primary);
+  --color-outline-variant: var(--outline-variant);
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+}
+
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-label {
+  font-family: var(--font-label);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}

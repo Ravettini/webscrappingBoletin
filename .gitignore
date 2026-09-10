@@ -1,3 +1,4 @@
+# Dependencies / Python legacy (eliminado)
 __pycache__/
 *.pyc
 *.pyo
@@ -6,5 +7,32 @@ __pycache__/
 .venv/
 venv/
 
+# Build artifacts
+build/
+dist/
+*.exe
+*.spec
+
+# Logs / debug / Excel de salida
 *.log
-*.json
+*.xlsx
+debug_scraping*.json
+debug_scraping*.log
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Env secrets (nunca commitear)
+.env
+.env.local
+.env*.local
+
+# Next / Vercel (dentro de web/ también hay .gitignore)
+web/node_modules/
+web/.next/
+web/.vercel/
+web/out/
+web/*.tsbuildinfo
+web/out.json

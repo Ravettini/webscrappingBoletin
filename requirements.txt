@@ -1,7 +1,0 @@
-flask
-requests
-pdfplumber
-pandas
-selenium
-webdriver-manager
-openpyxl
