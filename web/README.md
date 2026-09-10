@@ -1,9 +1,8 @@
 # SCRAPBO
 
-Explicación de cómo funciona el scraper: ver [README raíz](../README.md).
+Ver [README](../README.md).
 
 ```bash
-cd web
 npm install
 npm run dev
 ```

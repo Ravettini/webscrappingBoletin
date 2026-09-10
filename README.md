@@ -1,6 +1,6 @@
 # SCRAPBO
 
-Scraper del Boletín Oficial de CABA. Este README explica **cómo funciona** el sistema, para que otro desarrollador pueda entender el diseño y construir uno propio.
+Scraper del Boletín Oficial de CABA.
 
 Código: carpeta [`web/`](web/) (Next.js).
 
@@ -104,9 +104,9 @@ El histórico (`/historico`) lista ejecuciones y permite exportar Excel filtrado
 
 ---
 
-## Decisiones de diseño útiles si armás el tuyo
+## Decisiones de diseño
 
-1. **API REST > Selenium** — más estable y barato de hostear; el sitio ya expone JSON.
+1. **API REST > Selenium** — más estable; el sitio ya expone JSON.
 2. **Un día = un request** — rangos largos no se caen por timeout de una sola función.
 3. **Reintentos por día** (server + cliente) — la API/PDF a veces falla; no marcar el día OK si explotó.
 4. **No confiar solo en el CONSIDERANDO** — ahí aparecen designaciones viejas; los artículos resolutivos son la fuente de verdad del acto.
@@ -115,7 +115,7 @@ El histórico (`/historico`) lista ejecuciones y permite exportar Excel filtrado
 
 ---
 
-## Cómo levantarlo en local (para mirar el código en marcha)
+## Local
 
 ```bash
 cd web
