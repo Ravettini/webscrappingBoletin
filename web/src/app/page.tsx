@@ -211,7 +211,7 @@ export default function DashboardPage() {
         appendLog("ERROR", `Día ${fecha} agotó reintentos. Se omite.`);
       }
 
-      // Pausa entre días para no saturar API del boletín / Vercel.
+      // Pausa entre días para no saturar la API del boletín.
       if (i < dates.length - 1 && !cancelRef.current) {
         await new Promise((r) => setTimeout(r, 600));
       }
@@ -418,7 +418,7 @@ export default function DashboardPage() {
                   }}
                 />
                 <p className="mt-2 text-xs text-secondary opacity-80">
-                  Máximo 31 días por corrida. Se procesa un día por request (límite Vercel).
+                  Máximo 31 días por ejecución. Se procesa un día por request.
                 </p>
               </div>
 

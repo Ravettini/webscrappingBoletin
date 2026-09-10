@@ -2,10 +2,9 @@
 
 Scraper del **Boletín Oficial de CABA**. Extrae designaciones y renuncias (con CUIL) desde decretos/resoluciones, genera Excel y guarda histórico en Supabase.
 
-**Producción:** https://scrapbo.vercel.app  
 **Código de la app:** carpeta [`web/`](web/)
 
-> El stack viejo (Python/Selenium/Flask/PyInstaller) se eliminó. Todo corre en Next.js sobre Vercel.
+> El stack viejo (Python/Selenium/Flask/PyInstaller) se eliminó. Todo corre en Next.js.
 
 ---
 
@@ -22,7 +21,6 @@ Scraper del **Boletín Oficial de CABA**. Extrae designaciones y renuncias (con 
 ## Requisitos
 
 - Node.js 20+
-- Cuenta Vercel (deploy)
 - Proyecto Supabase (histórico)
 
 ---
@@ -48,30 +46,11 @@ Abrir http://localhost:3000
 | `SUPABASE_SERVICE_ROLE_KEY` | Recomendada | Preferible a anon en producción |
 | `JOB_INTERNAL_SECRET` | Recomendada | Encadenado de jobs server-side |
 | `UPSTASH_REDIS_REST_URL` / `TOKEN` | No | Persistencia de job entre invocaciones |
-| `BLOB_READ_WRITE_TOKEN` | No | Estado + Excel en Vercel Blob |
+| `BLOB_READ_WRITE_TOKEN` | No | Estado + Excel en storage opcional |
 
 \* Si no hay Supabase, el scrape y el Excel siguen funcionando; solo no se guarda histórico.
 
 Plantilla: [`web/.env.example`](web/.env.example)
-
----
-
-## Deploy (Vercel)
-
-Proyecto: **scrapbo** (equipo `nachos-projects`).
-
-```bash
-cd web
-npx vercel --prod
-# Si scrapbo.vercel.app no apunta al deploy nuevo:
-npx vercel alias set <url-del-deploy> scrapbo.vercel.app
-```
-
-**Importante:** en Settings → Deployment Protection, Vercel Authentication debe estar **off**, si no pide login a quien abra el link.
-
-Dominio a compartir: **https://scrapbo.vercel.app** (no usar `lourbot.vercel.app`).
-
-En Vercel hay que tener las mismas env vars que en `.env.local`.
 
 ---
 
@@ -133,7 +112,7 @@ web/                 ← app Next.js (única fuente de verdad)
   src/components/    ← UI
   src/lib/scraper/   ← boletín, PDF, extracción, Excel
   src/lib/supabase/ ← persistencia
-  src/lib/job/       ← job server-side opcional (Redis/Blob)
+  src/lib/job/       ← job server-side opcional (Redis/storage)
 docs/
   supabase.sql       ← schema de referencia
 README.md            ← este archivo
@@ -148,11 +127,4 @@ cd web
 npm run dev      # local
 npm run build    # build producción
 npm run lint
-```
-
-Debug de un día puntual (opcional, recrear script si hace falta):
-
-```bash
-cd web
-npx tsx -e "import { processDate } from './src/lib/scraper/process.ts'; console.log(await processDate('04/09/2026'))"
 ```

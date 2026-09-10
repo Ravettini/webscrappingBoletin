@@ -18,7 +18,7 @@ export function parseDateAR(s: string): Date {
   return new Date(yyyy, mm - 1, dd);
 }
 
-/** Tope de días por corrida (Hobby / Vercel: 1 día ≈ 1 request). */
+/** Tope de días por ejecución (1 día ≈ 1 request de scrape). */
 export const MAX_RANGE_DAYS = 31;
 
 /** Lunes–viernes de la semana de `ref`, sin futuros ni exclusiones. */
@@ -101,7 +101,7 @@ export function getDatesInRange(
     if (out.length > maxDays) {
       return {
         ok: false,
-        error: `El intervalo supera el máximo de ${maxDays} días (límite Vercel/Hobby).`,
+        error: `El intervalo supera el máximo de ${maxDays} días.`,
       };
     }
   }

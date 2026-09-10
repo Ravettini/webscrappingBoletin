@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     to?: string;
   };
 
-  // En Hobby sin Redis/Blob, el dashboard orquesta día por día desde el browser.
+  // Sin Redis/storage, el dashboard orquesta día por día desde el browser.
   if (!hasPersistentStore()) {
     return Response.json({
       ok: true,
